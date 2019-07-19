@@ -1,24 +1,25 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const app = express();
 app.use(bodyParser.json());
-
+app.use(cors());
 const database = {
   users: [
     {
       id: "12",
       name: "peter",
-      email: "aau@gmail.com",
-      passowrd: "dada",
+      email: "a@gmail.com",
+      password: "a",
       entries: 0,
       joined: new Date()
     },
     {
       id: "123",
       name: "pearfa-teadr",
-      email: "aadau@gmail.com",
-      passowrd: "dararada",
+      email: "a@gmail.com",
+      password: "a",
       entries: 0,
       joined: new Date()
     }
@@ -30,11 +31,16 @@ app.get("/", (req, res) => {
 });
 
 app.post("/signin", (req, res) => {
+  console.log(
+    req.body.email,
+    database.users[0].email,
+    req.body.password,
+    database.users[0].password
+  );
   req.body.email === database.users[0].email &&
   req.body.password === database.users[0].password
     ? res.json("success")
     : res.status(400).json("fail");
-  res.json("signin");
 });
 
 app.post("/register", (req, res) => {
