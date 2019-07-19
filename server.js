@@ -18,8 +18,8 @@ const database = {
     {
       id: "123",
       name: "pearfa-teadr",
-      email: "a@gmail.com",
-      password: "a",
+      email: "awe@gmail.com",
+      password: "awe",
       entries: 0,
       joined: new Date()
     }
@@ -33,7 +33,7 @@ app.get("/", (req, res) => {
 app.post("/signin", (req, res) => {
   req.body.email === database.users[0].email &&
   req.body.password === database.users[0].password
-    ? res.json("success")
+    ? res.json(database.users[0])
     : res.status(400).json("fail");
 });
 
@@ -47,7 +47,7 @@ app.post("/register", (req, res) => {
     entries: 0,
     joined: new Date()
   });
-  res.json("User has been registered");
+  res.json(database.users[database.users.length - 1]);
 });
 app.get("/profile/:id", (req, res) => {
   const { id } = req.params;
