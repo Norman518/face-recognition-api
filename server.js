@@ -43,10 +43,25 @@ app.get("/", (req, res) => {
 });
 
 app.post("/signin", (req, res) => {
-  req.body.email === database.users[0].email &&
-  req.body.password === database.users[0].password
-    ? res.json(database.users[0])
-    : res.status(400).json("fail");
+  postgres
+    .select("email", "hash")
+    .from("login")
+    .where("email", "=", req.body.email)
+    .then(data => {
+      const isValid = bcrypt.compareSync(req.body.password, data[0].hash);
+      console.log(req.body.password, data[0].hash);
+      if (isValid) {
+        return postgres
+          .select("*")
+          .from("users")
+          .where("email", "=", req.body.email)
+          .then(user => res.json(user[0]))
+          .catch(err => res.status(400).json("Can not get user!"));
+      } else {
+        res.status(400).json("Wrong Credentials");
+      }
+    })
+    .catch(err => res.status(400).json("Wrong Credentials"));
 });
 
 app.post("/register", (req, res) => {
