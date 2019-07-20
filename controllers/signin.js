@@ -1,7 +1,7 @@
 const handleSignin = (postgres, bcrypt) => (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res.status(400).json('incorrect form submission');
+    return res.status(400).json('Incorrect form submission');
   }
   postgres.select('email', 'hash').from('login')
     .where('email', '=', email)
@@ -13,12 +13,12 @@ const handleSignin = (postgres, bcrypt) => (req, res) => {
           .then(user => {
             res.json(user[0])
           })
-          .catch(err => res.status(400).json('unable to get user'))
+          .catch(err => res.status(400).json('Unable to get user'))
       } else {
-        res.status(400).json('wrong credentials')
+        res.status(400).json('Wrong credentials')
       }
     })
-    .catch(err => res.status(400).json('wrong credentials'))
+    .catch(err => res.status(400).json('Wrong credentials'))
 }
 
 module.exports = {
