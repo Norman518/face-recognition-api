@@ -17,30 +17,6 @@ const postgres = knex({
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
-const database = {
-  users: [
-    {
-      id: "12",
-      name: "peter",
-      email: "a@gmail.com",
-      password: "a",
-      entries: 0,
-      joined: new Date()
-    },
-    {
-      id: "123",
-      name: "pearfa-teadr",
-      email: "awe@gmail.com",
-      password: "awe",
-      entries: 0,
-      joined: new Date()
-    }
-  ]
-};
-
-app.get("/", (req, res) => {
-  res.send(database.users);
-});
 
 app.post("/signin", (req, res) => {
   postgres
@@ -67,7 +43,7 @@ app.post("/signin", (req, res) => {
 app.post("/register", (req, res) => {
   const { email, name, password } = req.body;
   const hash = bcrypt.hashSync(password);
-  postgres
+ return postgres
     .transaction(trx => {
       trx
         .insert({
@@ -87,7 +63,6 @@ app.post("/register", (req, res) => {
         .then(trx.commit)
         .catch(trx.rollback);
     })
-
     .catch(err => res.status(400).json("Unable to register!"));
 });
 app.get("/profile/:id", (req, res) => {
@@ -105,7 +80,6 @@ app.get("/profile/:id", (req, res) => {
 });
 app.put("/image", (req, res) => {
   const { id } = req.body;
-
   postgres("users")
     .where("id", "=", id)
     .increment("entries", 1)
