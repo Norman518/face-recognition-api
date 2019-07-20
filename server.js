@@ -25,7 +25,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
-  res.send(postgres.users);
+  res.send("Heroku deployment");
 });
 app.post("/signin", signin.handleSignin(postgres, bcrypt));
 app.post("/register", (req, res) => {
